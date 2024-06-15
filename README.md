@@ -1,1 +1,1 @@
-# plex-aspnetcore-extension
+# plex-extensions-aspnetcore

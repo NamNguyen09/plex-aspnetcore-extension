@@ -3,6 +3,6 @@
 ################################################################################
 
 .vs/
-/Plex.Extensions.AspNetCore/bin
-/Plex.Extensions.AspNetCore/obj
+/Plex.Security.Headers.AspNetCore/bin
+/Plex.Security.Headers.AspNetCore/obj
 

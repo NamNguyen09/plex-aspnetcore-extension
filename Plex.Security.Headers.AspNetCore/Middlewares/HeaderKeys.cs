@@ -1,4 +1,4 @@
-﻿namespace Plex.Extensions.AspNetCore.Middlewares
+﻿namespace Plex.Security.Headers.AspNetCore.Middlewares
 {
     public static class HeaderKeys
     {

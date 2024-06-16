@@ -6,8 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Version>8.0.0</Version>
 	<Authors>Tom Lee</Authors>
-	<PackageProjectUrl>https://github.com/NamNguyen09/plex-extensions-aspnetcore</PackageProjectUrl>
-	<RepositoryUrl>https://github.com/NamNguyen09/plex-extensions-aspnetcore</RepositoryUrl>
+	<PackageProjectUrl>https://github.com/NamNguyen09/plex-security-headers-aspnetcore</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/NamNguyen09/plex-security-headers-aspnetcore</RepositoryUrl>
 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
 	<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 	<NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>

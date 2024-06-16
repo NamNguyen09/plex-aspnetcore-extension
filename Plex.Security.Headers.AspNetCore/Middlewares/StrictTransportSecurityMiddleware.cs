@@ -9,11 +9,11 @@ public class StrictTransportSecurityMiddleware
     private readonly string _headerValue;
 
     public StrictTransportSecurityMiddleware(RequestDelegate next,
-                                             HstsOptions? options = null)
+                                             HstsOptions? hstsOptions = null)
     {
         _next = next;
-        options ??= new();
-        _headerValue = options.BuildHeaderValue();
+        hstsOptions ??= new();
+        _headerValue = hstsOptions.BuildHeaderValue();
     }
 
     public async Task Invoke(HttpContext context)
@@ -25,7 +25,7 @@ public class StrictTransportSecurityMiddleware
         await _next(context);
     }
 
-    bool ContainsHstsHeader(HttpResponse response)
+    static bool ContainsHstsHeader(HttpResponse response)
     {
         return response.Headers.Any(h => h.Key.Equals(_headerName, StringComparison.OrdinalIgnoreCase));
     }

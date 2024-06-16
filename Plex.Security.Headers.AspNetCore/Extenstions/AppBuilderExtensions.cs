@@ -6,9 +6,9 @@ public static class AppBuilderExtensions
 {
     public static IApplicationBuilder UseStrictTransportSecurity(
                                         this IApplicationBuilder app,
-                                        HstsOptions options)
+                                        HstsOptions hstsOptions)
     {
-        return app.UseMiddleware<StrictTransportSecurityMiddleware>(options);
+        return app.UseMiddleware<StrictTransportSecurityMiddleware>(hstsOptions);
     }
     public static IApplicationBuilder UseStrictTransportSecurity(this IApplicationBuilder app)
     {

@@ -1,18 +1,21 @@
-﻿using Microsoft.AspNetCore.HttpsPolicy;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.HttpsPolicy;
 
 namespace Plex.Security.Headers.AspNetCore.Extenstions;
 internal static class HstsOptionsExtensions
 {
-    public static string BuildHeaderValue(this HstsOptions options)
+    public static string BuildHeaderValue(this HstsOptions hstsOptions)
     {
-        ArgumentNullException.ThrowIfNull(options);
+        ArgumentNullException.ThrowIfNull(hstsOptions);
 
-        string headerValue = "max-age=" + options.MaxAge;
-        if (options.IncludeSubDomains)
+        var maxAge = Convert.ToInt64(Math.Floor(hstsOptions.MaxAge.TotalSeconds))
+                    .ToString(CultureInfo.InvariantCulture);
+        string headerValue = "max-age=" + maxAge;
+        if (hstsOptions.IncludeSubDomains)
         {
             headerValue += "; includeSubDomains";
         }
-        if (options.Preload)
+        if (hstsOptions.Preload)
         {
             headerValue += "; preload";
         }

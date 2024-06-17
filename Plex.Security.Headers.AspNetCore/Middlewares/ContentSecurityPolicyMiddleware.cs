@@ -1,15 +1,11 @@
 ﻿using System.Security.Cryptography;
+using Microsoft.Net.Http.Headers;
 
 namespace Plex.Security.Headers.AspNetCore.Middlewares;
 public class ContentSecurityPolicyMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly string _cspHeader;
-
-    const string _xContentSecurityPolicyKey = "Content-Security-Policy";
-    const string _xContentTypeOptionsKey = "X-Content-Type-Options";
-    const string _xFrameOptionsKey = "X-Frame-Options";
-    const string _referrerPolicyKey = "Referrer-Policy";   
 
     public ContentSecurityPolicyMiddleware(RequestDelegate next, string cspHeader)
     {
@@ -19,27 +15,12 @@ public class ContentSecurityPolicyMiddleware
 
     public async Task InvokeAsync(HttpContext ctx)
     {
-        if (!ctx.Response.Headers.ContainsKey(_xContentTypeOptionsKey))
-        {
-            ctx.Response.Headers.Append(_xContentTypeOptionsKey, "nosniff");
-        }
-
-        if (!ctx.Response.Headers.ContainsKey(_xFrameOptionsKey))
-        {
-            ctx.Response.Headers.Append(_xFrameOptionsKey, "SAMEORIGIN");
-        }
-
-        if (!ctx.Response.Headers.ContainsKey(_referrerPolicyKey))
-        {
-            ctx.Response.Headers.Append(_referrerPolicyKey, "strict-origin-when-cross-origin");
-        }
-
-        if (!ctx.Response.Headers.ContainsKey(_xContentSecurityPolicyKey)
+        if (!ctx.Response.Headers.ContainsKey(HeaderNames.ContentSecurityPolicy)
                   && !string.IsNullOrWhiteSpace(_cspHeader))
         {
             string nonce = Convert.ToBase64String(GenerateRandomNonce(16));
             ctx.Items["nonce"] = nonce;
-            ctx.Response.Headers.Append(_xContentSecurityPolicyKey, _cspHeader.Replace("{nonce}", nonce));
+            ctx.Response.Headers.Append(HeaderNames.ContentSecurityPolicy, _cspHeader.Replace("{nonce}", nonce));
         }
 
         await _next(ctx);

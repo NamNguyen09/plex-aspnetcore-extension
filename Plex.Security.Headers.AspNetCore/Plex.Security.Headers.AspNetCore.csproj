@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>8.0.1</Version>
+    <Version>8.0.2</Version>
 	<Authors>Tom Lee</Authors>
 	<PackageProjectUrl>https://github.com/NamNguyen09/plex-security-headers-aspnetcore</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/NamNguyen09/plex-security-headers-aspnetcore</RepositoryUrl>
@@ -16,7 +16,7 @@
 	<OutputType>Library</OutputType>
 	<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 	<IsPackable>true</IsPackable>
-	<PackageReleaseNotes>Update cachemaxage for hsts</PackageReleaseNotes>
+	<PackageReleaseNotes>Remove checking https when adding hsts header</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

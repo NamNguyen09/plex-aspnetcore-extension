@@ -9,7 +9,7 @@ public class RequestIdMiddleware
 
     public RequestIdMiddleware(RequestDelegate next)
     {
-        _next = next ?? throw new ArgumentNullException(nameof(next));
+        _next = next;
     }
     public async Task Invoke(HttpContext httpContext)
     {

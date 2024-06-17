@@ -1,43 +1,43 @@
 ﻿using System.Globalization;
 using Microsoft.Net.Http.Headers;
+using Plex.Security.Headers.AspNetCore.Extenstions;
 
 namespace Plex.Security.Headers.AspNetCore.Middlewares;
 public class CacheControlMiddleware
 {
-    private readonly RequestDelegate _next;
+	private readonly RequestDelegate _next;
 
-    private readonly int _cacheMaxAge;
+	private readonly TimeSpan _cacheMaxAge;
+	private readonly TimeSpan _cacheMaxAgeStaticFiles;
 
-    public CacheControlMiddleware(RequestDelegate next, int cacheMaxAgeInDays)
-    {
-        _next = next;
-        _cacheMaxAge = cacheMaxAgeInDays;
-    }
+	public CacheControlMiddleware(RequestDelegate next,
+								  TimeSpan cacheMaxAge,
+								  TimeSpan cacheMaxAgeStaticFiles)
+	{
+		_next = next;
+		_cacheMaxAge = cacheMaxAge;
+		_cacheMaxAgeStaticFiles = cacheMaxAgeStaticFiles;
+	}
 
-    public async Task InvokeAsync(HttpContext ctx)
-    {
-        string path = ctx.Request.Path;
-        if (!string.IsNullOrWhiteSpace(path) && (path.EndsWith(".js") || path.EndsWith(".png") || path.EndsWith(".mp3")
-            || path.EndsWith(".ico") || path.EndsWith(".map") || path.EndsWith(".svg")))
-        {
-            ctx.Response.Headers.Remove(HeaderNames.CacheControl);
-            ctx.Response.Headers.Remove(HeaderNames.Expires);
+	public async Task InvokeAsync(HttpContext ctx)
+	{
+		if (!ctx.HasCacheControlHeader()
+			&& ctx.Request.IsStaticFile())
+		{
+			var maxAge = Convert.ToInt64(Math.Floor(_cacheMaxAgeStaticFiles.TotalSeconds)).ToString(CultureInfo.InvariantCulture);
+			ctx.Response.Headers.Append(HeaderNames.CacheControl, $"max-age={maxAge}, immutable");
+			ctx.Response.Headers.Append(HeaderNames.Expires, DateTime.UtcNow.AddDays(_cacheMaxAge.TotalDays).ToString("R", CultureInfo.InvariantCulture));
+		}
+		else if (HttpMethods.IsGet(ctx.Request.Method)
+				 && !ctx.HasCacheControlHeader())
+		{
+			ctx.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue()
+			{
+				Public = true,
+				MaxAge = _cacheMaxAge
+			};
+		}
 
-            ctx.Response.Headers.Append(HeaderNames.CacheControl, $"public, max-age={60 * 60 * 24 * _cacheMaxAge}");
-            ctx.Response.Headers.Append(HeaderNames.Expires, DateTime.UtcNow.AddDays(_cacheMaxAge).ToString("R", CultureInfo.InvariantCulture));
-        }
-
-        if (ctx.Request.Method.Equals(HttpMethod.Get))
-        {
-            ctx.Response.GetTypedHeaders().CacheControl =
-            new CacheControlHeaderValue()
-            {
-                Public = true,
-                MaxAge = TimeSpan.FromMinutes(60)
-            };
-            ctx.Response.Headers[HeaderNames.Vary] = new string[] { "Accept-Encoding" };
-        }
-
-        await _next(ctx);
-    }
+		await _next(ctx);
+	}	
 }

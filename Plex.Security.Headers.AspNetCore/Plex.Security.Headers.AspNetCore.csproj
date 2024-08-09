@@ -8,7 +8,7 @@
 	<Authors>Tom Lee</Authors>
 	<PackageProjectUrl>https://github.com/NamNguyen09/plex-security-headers-aspnetcore</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/NamNguyen09/plex-security-headers-aspnetcore</RepositoryUrl>
-	<PackageLicenseFile>LICENSE</PackageLicenseFile>
+	<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 	<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 	<NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
 	<!-- Let's generate our own assembly info -->
@@ -17,13 +17,18 @@
 	<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 	<IsPackable>true</IsPackable>
 	<PackageReleaseNotes>Remove checking https when adding hsts header</PackageReleaseNotes>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
+	<None Include="..\LICENSE.md">
+		<Pack>True</Pack>
+		<PackagePath>\</PackagePath>
+	</None>
+	<None Include="..\README.md">
+		<Pack>True</Pack>
+		<PackagePath>\</PackagePath>
+	</None>
+ </ItemGroup>
 
 </Project>

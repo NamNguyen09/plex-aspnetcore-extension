@@ -1,1 +1,3 @@
-# plex-extensions-aspnetcore
+# Plex.Security.Headers.AspNetCore
+
+This is a project that help to add security headers...

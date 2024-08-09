@@ -1,0 +1,21 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata>
+		<id>Plex.Security.Headers.AspNetCore</id>
+		<title>Plex.Security.Headers.AspNetCore</title>
+		<version>8.0</version>
+		<authors>Tom Lee</authors>
+		<owners>Tom Lee</owners>
+		<projectUrl>https://github.com/NamNguyen09/plex-security-headers-aspnetcore</projectUrl>
+		<license type="file">LICENSE.md</license>
+		<requireLicenseAcceptance>true</requireLicenseAcceptance>
+		<description>Security headers AspNetCore</description>
+		<readme>README.md</readme>
+		<releaseNotes>$releasenotes$</releaseNotes>
+	</metadata>
+	<files>
+		<file src="..\LICENSE.md" target="LICENSE.md" />
+		<file src="..\README.md" target="README.md" />
+		<!-- Include other necessary files -->
+	</files>
+</package>

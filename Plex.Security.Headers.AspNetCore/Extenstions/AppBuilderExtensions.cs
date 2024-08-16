@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.HttpsPolicy;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.Net.Http.Headers;
 using Plex.Security.Headers.AspNetCore.Middlewares;
 
 namespace Plex.Security.Headers.AspNetCore.Extenstions;
@@ -51,5 +53,26 @@ public static class AppBuilderExtensions
                                                  string nonceValue)
     {
         return app.UseMiddleware<ContentSecurityPolicyMetaMiddleware>(cpsHeader, nonceValue);
+    }
+    public static IApplicationBuilder UseStaticFilesAndCache(this IApplicationBuilder app,
+                                                             TimeSpan? cacheMaxAge = null)
+    {
+        if (cacheMaxAge == null) cacheMaxAge = TimeSpan.FromDays(100);
+        // Cache static files
+        string maxAgeSeconds = Convert.ToInt64(Math.Ceiling(cacheMaxAge.Value.TotalSeconds)).ToString("R", CultureInfo.InvariantCulture);
+        string maxAgeDays = DateTime.UtcNow.AddDays(Convert.ToInt64(Math.Ceiling(cacheMaxAge.Value.TotalDays))).ToString("R", CultureInfo.InvariantCulture);
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            OnPrepareResponse = ctx =>
+            {
+                ctx.Context.Response.Headers.Remove(HeaderNames.CacheControl);
+                ctx.Context.Response.Headers.Remove(HeaderNames.Expires);
+
+                ctx.Context.Response.Headers.Append(HeaderNames.CacheControl, $"public, max-age={maxAgeSeconds}, immutable");
+                ctx.Context.Response.Headers.Append(HeaderNames.Expires, maxAgeDays);
+            }
+        });
+
+        return app;
     }
 }

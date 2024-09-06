@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Net.Http.Headers;
 using Plex.Security.Headers.AspNetCore.Middlewares;
@@ -21,6 +22,7 @@ public static class AppBuilderExtensions
                                             string? nonceValue = null,
                                             bool isSpaApp = false)
     {
+        nonceValue ??= Convert.ToBase64String(GenerateRandomNonce(16));
         return app.UseMiddleware<ContentSecurityPolicyMiddleware>(cpsHeader, nonceValue, isSpaApp);
     }
     public static IApplicationBuilder UseRemoveInsecureHeaders(this IApplicationBuilder app)
@@ -74,5 +76,18 @@ public static class AppBuilderExtensions
         });
 
         return app;
+    }
+    static byte[] GenerateRandomNonce(int length)
+    {
+        // Create a byte array to hold the random nonce
+        byte[] nonce = new byte[length];
+
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            // Fill the nonce array with random data
+            rng.GetBytes(nonce);
+        }
+
+        return nonce;
     }
 }
